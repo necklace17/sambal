@@ -31,12 +31,12 @@ class ItemInfoControllerIntgTest {
   void setUp() {
     // given
     var itemInfos = List.of(
-        new ItemInfoEntity(null, "firstItem", "firstCategory", List.of("First Tag", "Second Tag"),
-            "First Description", 11.30),
-        new ItemInfoEntity(null, "secondItem", "secondCategory", List.of("Third Tag"),
-            "second Description", 12.30),
-        new ItemInfoEntity("abc", "thirdItem", "third Category", List.of(),
-            "third Description", 13.30)
+        new ItemInfoEntity(null, "firstItem", "firstCategory",
+            List.of("First Tag", "Second Tag"), "First Description", 11.30),
+        new ItemInfoEntity(null, "secondItem", "secondCategory",
+            List.of("Third Tag"), "second Description", 12.30),
+        new ItemInfoEntity("abc", "thirdItem", "third Category",
+            List.of(), "third Description", 13.30)
     );
     itemInfoRepository.saveAll(itemInfos)
         .blockLast();
@@ -84,14 +84,36 @@ class ItemInfoControllerIntgTest {
   @Test
   void getItemInfoById() {
     // when
+    var itemInfoId = "abc";
     webTestClient.get()
-        .uri(ITEM_INFOS_URL + "/abc")
+        .uri(ITEM_INFOS_URL + "/{id}", itemInfoId)
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBody()
+        .jsonPath("$.name")
+        .isEqualTo("thirdItem");
+  }
+
+  @Test
+  void updateItem() {
+    // given
+    var itemInfoId = "abc";
+    var newName = "New Name";
+    var updatedItem = this.itemInfoRepository.findById(itemInfoId)
+        .block()
+        .toDomain();
+    updatedItem.setName(newName);
+    // when
+    webTestClient.put()
+        .uri(ITEM_INFOS_URL + "/{id}", itemInfoId)
+        .bodyValue(updatedItem)
         .exchange()
         .expectStatus()
         .is2xxSuccessful()
         .expectBody(ItemInfo.class)
-        .consumeWith(itemInfoEntityExchangeResult -> assertThat(
-            itemInfoEntityExchangeResult.getResponseBody()
-                .getName()).isEqualTo("thirdItem"));
+        // then
+        .consumeWith(entityExchangeResult -> assertThat(entityExchangeResult.getResponseBody()
+            .getName()).isEqualTo(updatedItem.getName()));
   }
 }

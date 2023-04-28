@@ -11,4 +11,6 @@ public interface ItemInfoPort {
   Flux<ItemInfo> getAllItemInfos();
 
   Mono<ItemInfo> getItemInfoById(String id);
+
+  Mono<ItemInfo> updateItemInfoById(String id, ItemInfo itemInfo);
 }
