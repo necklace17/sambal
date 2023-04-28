@@ -78,6 +78,19 @@ class ItemInfoRepositoryIntgTest {
   }
 
   @Test
+  void deleteItemInfo() {
+    // when
+    itemInfoRepository.deleteById("abc")
+        .block();
+    var itemInfos = itemInfoRepository.findAll();
+    // then
+    StepVerifier.create(itemInfos)
+        .expectNextCount(2)
+        .verifyComplete();
+
+  }
+
+  @Test
   void updateItemInfo() {
     // given
     var itemInfo = itemInfoRepository.findById("abc")
