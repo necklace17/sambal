@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/accommodation")
 public class AccommodationController {
 
   private final CrudAccommodation crudAccommodation;
@@ -26,29 +26,29 @@ public class AccommodationController {
   }
 
 
-  @PostMapping("/iteminfos")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Accommodation> addAccommodation(@RequestBody Accommodation accommodation) {
     return crudAccommodation.createAccommodation(accommodation);
   }
 
-  @GetMapping("/iteminfos")
+  @GetMapping
   public Flux<Accommodation> getAllAccommodations() {
     return crudAccommodation.getAllAccommodations();
   }
 
-  @GetMapping("/iteminfos/{id}")
+  @GetMapping("/{id}")
   public Mono<Accommodation> getAccommodationsById(@PathVariable String id) {
     return crudAccommodation.getAccommodationById(id);
   }
 
-  @PutMapping("/iteminfos/{id}")
+  @PutMapping("/{id}")
   public Mono<Accommodation> updateAccommodationById(@PathVariable String id,
       @RequestBody Accommodation accommodation) {
     return crudAccommodation.updateAccommodationById(id, accommodation);
   }
 
-  @DeleteMapping("/iteminfos/{id}")
+  @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> deleteAccommodationById(@PathVariable String id) {
     return crudAccommodation.deleteAccommodationById(id);
