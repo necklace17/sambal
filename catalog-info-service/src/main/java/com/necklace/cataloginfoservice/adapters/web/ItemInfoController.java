@@ -3,6 +3,7 @@ package com.necklace.cataloginfoservice.adapters.web;
 import com.necklace.cataloginfoservice.cataloginfo.domain.ItemInfo;
 import com.necklace.cataloginfoservice.cataloginfo.ports.in.CrudItemInfo;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,11 @@ public class ItemInfoController {
   public Mono<ItemInfo> updateItemInfoById(@PathVariable String id,
       @RequestBody ItemInfo itemInfo) {
     return crudItemInfo.updateItemInfoById(id, itemInfo);
+  }
+
+  @DeleteMapping("/iteminfos/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> deleteItemInfoById(@PathVariable String id) {
+    return crudItemInfo.deleteItemById(id);
   }
 }

@@ -116,4 +116,16 @@ class ItemInfoControllerIntgTest {
         .consumeWith(entityExchangeResult -> assertThat(entityExchangeResult.getResponseBody()
             .getName()).isEqualTo(updatedItem.getName()));
   }
+
+  @Test
+  void deleteItem() {
+    // given
+    var itemInfoId = "abc";
+    // when
+    webTestClient.delete()
+        .uri(ITEM_INFOS_URL + "/{id}", itemInfoId)
+        .exchange()
+        .expectStatus()
+        .isNoContent();
+  }
 }

@@ -13,4 +13,6 @@ public interface ItemInfoPort {
   Mono<ItemInfo> getItemInfoById(String id);
 
   Mono<ItemInfo> updateItemInfoById(String id, ItemInfo itemInfo);
+
+  Mono<Void> deleteItemById(String id);
 }

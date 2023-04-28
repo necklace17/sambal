@@ -35,4 +35,9 @@ public class CatalogInfoService implements CrudItemInfo {
   public Mono<ItemInfo> updateItemInfoById(String id, ItemInfo itemInfo) {
     return itemInfoPort.updateItemInfoById(id, itemInfo);
   }
+
+  @Override
+  public Mono<Void> deleteItemById(String id) {
+    return itemInfoPort.deleteItemById(id);
+  }
 }

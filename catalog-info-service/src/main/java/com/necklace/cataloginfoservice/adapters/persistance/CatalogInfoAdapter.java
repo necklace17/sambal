@@ -47,4 +47,9 @@ public class CatalogInfoAdapter implements ItemInfoPort {
               .map(ItemInfoEntity::toDomain);
         });
   }
+
+  @Override
+  public Mono<Void> deleteItemById(String id) {
+    return this.itemInfoRepository.deleteById(id);
+  }
 }
