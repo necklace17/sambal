@@ -1,7 +1,7 @@
 db.createUser(
     {
-      user: "catalogdbuser",
+      user: "user1",
       pwd: "mypassword",
-      roles: [{role: "readWrite", db: "cataloginfo"}]
+      roles: [{role: "readWrite", db: "catalog"}]
     }
 );

@@ -76,4 +76,19 @@ class ItemInfoRepositoryIntgTest {
         })
         .verifyComplete();
   }
+
+  @Test
+  void updateItemInfo() {
+    // given
+    var itemInfo = itemInfoRepository.findById("abc")
+        .block();
+    var newName = "New Name";
+    itemInfo.setName(newName);
+    // when
+    var itemInfoMono = itemInfoRepository.save(itemInfo);
+    // then
+    StepVerifier.create(itemInfoMono)
+        .assertNext(info -> assertThat(info.getName()).isEqualTo(newName))
+        .verifyComplete();
+  }
 }
