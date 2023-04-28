@@ -5,6 +5,7 @@ import com.necklace.cataloginfoservice.cataloginfo.ports.in.CreateItemInfo;
 import com.necklace.cataloginfoservice.cataloginfo.ports.in.GetItemInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,11 @@ public class ItemInfoController {
   @GetMapping("/iteminfos")
   public Flux<ItemInfo> getAllItemInfos() {
     return getItemInfo.getAllItemInfos();
+  }
+
+  @GetMapping("/iteminfos/{id}")
+  public Mono<ItemInfo> getAllItemInfosById(@PathVariable String id) {
+    return getItemInfo.getItemInfoById(id);
   }
 
 }

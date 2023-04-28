@@ -26,4 +26,9 @@ public class CatalogInfoService implements CreateItemInfo, GetItemInfo {
   public Flux<ItemInfo> getAllItemInfos() {
     return itemInfoPort.getAllItemInfos();
   }
+
+  @Override
+  public Mono<ItemInfo> getItemInfoById(String id) {
+    return itemInfoPort.getItemInfoById(id);
+  }
 }

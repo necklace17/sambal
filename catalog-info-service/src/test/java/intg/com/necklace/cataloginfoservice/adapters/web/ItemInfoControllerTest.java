@@ -80,4 +80,18 @@ class ItemInfoControllerIntgTest {
         .expectBodyList(ItemInfo.class)
         .hasSize(3);
   }
+
+  @Test
+  void getItemInfoById() {
+    // when
+    webTestClient.get()
+        .uri(ITEM_INFOS_URL + "/abc")
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBody(ItemInfo.class)
+        .consumeWith(itemInfoEntityExchangeResult -> assertThat(
+            itemInfoEntityExchangeResult.getResponseBody()
+                .getName()).isEqualTo("thirdItem"));
+  }
 }

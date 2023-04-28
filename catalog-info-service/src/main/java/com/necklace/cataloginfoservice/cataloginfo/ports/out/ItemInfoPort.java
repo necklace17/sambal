@@ -9,4 +9,6 @@ public interface ItemInfoPort {
   Mono<ItemInfo> addItemInfo(ItemInfo itemInfo);
 
   Flux<ItemInfo> getAllItemInfos();
+
+  Mono<ItemInfo> getItemInfoById(String id);
 }

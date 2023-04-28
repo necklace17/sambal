@@ -27,4 +27,11 @@ public class CatalogInfoAdapter implements ItemInfoPort {
     return itemInfoRepository.findAll()
         .map(ItemInfoEntity::toDomain);
   }
+
+  @Override
+  public Mono<ItemInfo> getItemInfoById(String id) {
+    return itemInfoRepository.findById(String.valueOf(id))
+        .map(ItemInfoEntity::toDomain);
+  }
+
 }
