@@ -1,7 +1,7 @@
 db.createUser(
     {
-      user: "chatdbuser",
+      user: "catalogdbuser",
       pwd: "mypassword",
-      roles: [ { role: "readWrite", db: "chat" } ]
+      roles: [{role: "readWrite", db: "cataloginfo"}]
     }
 );
