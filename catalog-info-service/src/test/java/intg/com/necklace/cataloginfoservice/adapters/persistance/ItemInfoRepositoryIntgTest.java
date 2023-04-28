@@ -1,5 +1,8 @@
 package com.necklace.cataloginfoservice.adapters.persistance;
 
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +26,7 @@ class ItemInfoRepositoryIntgTest {
             "First Description", 11.30),
         new ItemInfo(null, "secondItem", "secondCategory", List.of("Third Tag"),
             "second Description", 12.30),
-        new ItemInfo(null, "thirdItem", "third Category", List.of(),
+        new ItemInfo("abc", "thirdItem", "third Category", List.of(),
             "third Description", 13.30)
     );
     this.itemInfoRepository.saveAll(itemInfos)
@@ -38,15 +41,39 @@ class ItemInfoRepositoryIntgTest {
 
   @Test
   void findAll() {
-    //given
-
     //when
     var itemInfosFlux = itemInfoRepository.findAll();
-
     //then
     StepVerifier.create(itemInfosFlux)
         .expectNextCount(3)
         .verifyComplete();
   }
 
+  @Test
+  void findOne() {
+    // when
+    var itemInfoMono = itemInfoRepository.findById("abc")
+        .log();
+    //then
+    StepVerifier.create(itemInfoMono)
+        .assertNext(info -> assertThat(info.getName()).isEqualTo("thirdItem"))
+        .verifyComplete();
+  }
+
+  @Test
+  void saveItemInfo() {
+    // given
+    var itemInfo = new ItemInfo(null, "firstItem", "firstCategory",
+        List.of("First Tag", "Second Tag"),
+        "First Description", 11.30);
+    // when
+    var itemInfoMono = itemInfoRepository.save(itemInfo);
+    // then
+    StepVerifier.create(itemInfoMono)
+        .assertNext(info -> {
+          assertThat(info.getName()).isEqualTo(itemInfo.getName());
+          assertThat(info.getItemInfoId()).isNotNull();
+        })
+        .verifyComplete();
+  }
 }
