@@ -4,6 +4,7 @@ import com.necklace.cataloginfoservice.adapters.persistance.entity.ItemInfoEntit
 import com.necklace.cataloginfoservice.cataloginfo.domain.ItemInfo;
 import com.necklace.cataloginfoservice.cataloginfo.ports.out.ItemInfoPort;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -18,6 +19,12 @@ public class CatalogInfoAdapter implements ItemInfoPort {
   @Override
   public Mono<ItemInfo> addItemInfo(ItemInfo itemInfo) {
     return itemInfoRepository.save(ItemInfoEntity.fromDomain(itemInfo))
+        .map(ItemInfoEntity::toDomain);
+  }
+
+  @Override
+  public Flux<ItemInfo> getAllItemInfos() {
+    return itemInfoRepository.findAll()
         .map(ItemInfoEntity::toDomain);
   }
 }
