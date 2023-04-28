@@ -3,6 +3,7 @@ package com.necklace.cataloginfoservice.adapters.persistance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.necklace.cataloginfoservice.adapters.persistance.entity.ItemInfoEntity;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import reactor.test.StepVerifier;
 
 @DataMongoTest
 @ActiveProfiles("test")
-class ItemInfoRepositoryIntgTest {
+class ItemInfoEntityRepositoryIntgTest {
 
   @Autowired
   ItemInfoRepository itemInfoRepository;
@@ -22,11 +23,11 @@ class ItemInfoRepositoryIntgTest {
   @BeforeEach
   void setUp() {
     var itemInfos = List.of(
-        new ItemInfo(null, "firstItem", "firstCategory", List.of("First Tag", "Second Tag"),
+        new ItemInfoEntity(null, "firstItem", "firstCategory", List.of("First Tag", "Second Tag"),
             "First Description", 11.30),
-        new ItemInfo(null, "secondItem", "secondCategory", List.of("Third Tag"),
+        new ItemInfoEntity(null, "secondItem", "secondCategory", List.of("Third Tag"),
             "second Description", 12.30),
-        new ItemInfo("abc", "thirdItem", "third Category", List.of(),
+        new ItemInfoEntity("abc", "thirdItem", "third Category", List.of(),
             "third Description", 13.30)
     );
     this.itemInfoRepository.saveAll(itemInfos)
@@ -63,7 +64,7 @@ class ItemInfoRepositoryIntgTest {
   @Test
   void saveItemInfo() {
     // given
-    var itemInfo = new ItemInfo(null, "firstItem", "firstCategory",
+    var itemInfo = new ItemInfoEntity(null, "firstItem", "firstCategory",
         List.of("First Tag", "Second Tag"),
         "First Description", 11.30);
     // when
