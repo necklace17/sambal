@@ -158,5 +158,6 @@ class AccommodationControllerIntgTest {
         .expectStatus()
         .isNoContent();
   }
+
 }
 
