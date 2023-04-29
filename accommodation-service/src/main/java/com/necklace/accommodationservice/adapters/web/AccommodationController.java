@@ -2,6 +2,7 @@ package com.necklace.accommodationservice.adapters.web;
 
 import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
 import com.necklace.accommodationservice.cataloginfo.ports.in.CrudAccommodation;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class AccommodationController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<Accommodation> addAccommodation(@RequestBody Accommodation accommodation) {
+  public Mono<Accommodation> addAccommodation(@RequestBody @Valid Accommodation accommodation) {
     return crudAccommodation.createAccommodation(accommodation);
   }
 
@@ -44,7 +45,7 @@ public class AccommodationController {
 
   @PutMapping("/{id}")
   public Mono<Accommodation> updateAccommodationById(@PathVariable String id,
-      @RequestBody Accommodation accommodation) {
+      @RequestBody @Valid Accommodation accommodation) {
     return crudAccommodation.updateAccommodationById(id, accommodation);
   }
 

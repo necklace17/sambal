@@ -49,6 +49,25 @@ class AccommodationControllerTest {
   }
 
   @Test
+  void addAccommodation_validation() {
+    // given
+    var accommodation = new Accommodation("", "", List.of(),
+        "another Description", -13.30);
+    // when
+    webTestClient.post()
+        .uri(ACCOMMODATIONS_URL)
+        .bodyValue(accommodation)
+        .exchange()
+        .expectStatus()
+        .isBadRequest()
+        .expectBody(String.class)
+        // then
+        .consumeWith(accommodationEntityExchangeResult -> assertThat(
+            accommodationEntityExchangeResult.getResponseBody()).contains(
+            "accommodation.name", "accommodation.category", "accommodation.year"));
+  }
+
+  @Test
   void addAccommodation() {
     // given
     var accommodation = new Accommodation("anotherAccommodation", "another Category", List.of(),
