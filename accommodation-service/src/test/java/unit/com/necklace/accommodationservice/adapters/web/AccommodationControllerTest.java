@@ -1,52 +1,51 @@
 package com.necklace.accommodationservice.adapters.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-import com.necklace.accommodationservice.adapters.persistance.AccommodationRepository;
-import com.necklace.accommodationservice.adapters.persistance.entity.AccommodationEntity;
 import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
+import com.necklace.accommodationservice.cataloginfo.ports.in.CrudAccommodation;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@WebFluxTest(controllers = AccommodationController.class)
 @AutoConfigureWebTestClient
-class AccommodationControllerIntgTest {
-
+class AccommodationControllerTest {
 
   private final static String ACCOMMODATIONS_URL = "/v1/accommodation";
   @Autowired
-  AccommodationRepository accommodationRepository;
-  @Autowired
-  WebTestClient webTestClient;
+  private WebTestClient webTestClient;
+  @MockBean
+  private CrudAccommodation crudAccommodationMock;
 
-  @BeforeEach
-  void setUp() {
-    // given
+  @Test
+  void getAllAccommodations() {
     var accommodations = List.of(
-        new AccommodationEntity(null, "firstAccommodation", "firstCategory",
+        new Accommodation("firstAccommodation", "firstCategory",
             List.of("First Tag", "Second Tag"), "First Description", 11.30),
-        new AccommodationEntity(null, "secondAccommodation", "secondCategory",
+        new Accommodation("secondAccommodation", "secondCategory",
             List.of("Third Tag"), "second Description", 12.30),
-        new AccommodationEntity("abc", "thirdAccommodation", "third Category",
+        new Accommodation("thirdAccommodation", "third Category",
             List.of(), "third Description", 13.30)
     );
-    accommodationRepository.saveAll(accommodations)
-        .blockLast();
-  }
-
-  @AfterEach
-  void tearDown() {
-    accommodationRepository.deleteAll()
-        .block();
+    // when
+    when(crudAccommodationMock.getAllAccommodations()).thenReturn(
+        Flux.fromIterable(accommodations));
+    webTestClient.get()
+        .uri(ACCOMMODATIONS_URL)
+        .exchange()
+        // then
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBodyList(Accommodation.class)
+        .hasSize(3);
   }
 
   @Test
@@ -54,6 +53,9 @@ class AccommodationControllerIntgTest {
     // given
     var accommodation = new Accommodation("anotherAccommodation", "another Category", List.of(),
         "another Description", 13.30);
+
+    when(crudAccommodationMock.createAccommodation(accommodation)).thenReturn(
+        Mono.just(accommodation));
     // when
     webTestClient.post()
         .uri(ACCOMMODATIONS_URL)
@@ -71,22 +73,13 @@ class AccommodationControllerIntgTest {
   }
 
   @Test
-  void getAllAccommodations() {
-    // when
-    webTestClient.get()
-        .uri(ACCOMMODATIONS_URL)
-        .exchange()
-        // then
-        .expectStatus()
-        .is2xxSuccessful()
-        .expectBodyList(Accommodation.class)
-        .hasSize(3);
-  }
-
-  @Test
   void getAccommodationById() {
     // when
     var accommodationId = "abc";
+    var accommodation = new Accommodation("anotherAccommodation", "another Category", List.of(),
+        "another Description", 13.30);
+    when(crudAccommodationMock.getAccommodationById(accommodationId)).thenReturn(
+        Mono.just(accommodation));
     webTestClient.get()
         .uri(ACCOMMODATIONS_URL + "/{id}", accommodationId)
         .exchange()
@@ -94,29 +87,27 @@ class AccommodationControllerIntgTest {
         .is2xxSuccessful()
         .expectBody()
         .jsonPath("$.name")
-        .isEqualTo("thirdAccommodation");
+        .isEqualTo(accommodation.getName());
   }
 
   @Test
   void updateAccommodation() {
-    // given
-    var accommodationId = "abc";
-    var newName = "New Name";
-    var updatedAccommodation = this.accommodationRepository.findById(accommodationId)
-        .block()
-        .toDomain();
-    updatedAccommodation.setName(newName);
     // when
+    var accommodationId = "abc";
+    var accommodation = new Accommodation("anotherAccommodation", "another Category", List.of(),
+        "another Description", 13.30);
+    when(crudAccommodationMock.updateAccommodationById(accommodationId, accommodation)).thenReturn(
+        Mono.just(accommodation));
     webTestClient.put()
         .uri(ACCOMMODATIONS_URL + "/{id}", accommodationId)
-        .bodyValue(updatedAccommodation)
+        .bodyValue(accommodation)
         .exchange()
         .expectStatus()
         .is2xxSuccessful()
         .expectBody(Accommodation.class)
         // then
         .consumeWith(entityExchangeResult -> assertThat(entityExchangeResult.getResponseBody()
-            .getName()).isEqualTo(updatedAccommodation.getName()));
+            .getName()).isEqualTo(accommodation.getName()));
   }
 
   @Test
@@ -124,11 +115,12 @@ class AccommodationControllerIntgTest {
     // given
     var accommodationId = "abc";
     // when
+    when(crudAccommodationMock.deleteAccommodationById(accommodationId)).thenReturn(Mono.empty());
     webTestClient.delete()
         .uri(ACCOMMODATIONS_URL + "/{id}", accommodationId)
         .exchange()
         .expectStatus()
         .isNoContent();
   }
-}
 
+}
