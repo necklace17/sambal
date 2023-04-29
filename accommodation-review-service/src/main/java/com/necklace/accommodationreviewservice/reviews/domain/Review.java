@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Review {
 
-  private String AccommodationId;
+  private String accommodationId;
   private String comment;
   private Double rating;
 
