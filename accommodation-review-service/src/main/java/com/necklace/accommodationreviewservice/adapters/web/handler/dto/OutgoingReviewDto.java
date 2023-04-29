@@ -15,7 +15,7 @@ public class OutgoingReviewDto {
   private String comment;
   private Double rating;
 
-  public static OutgoingReviewDto fromDomain(ReviewEntity reviewEntity) {
+  public static OutgoingReviewDto fromPersistenceEntity(ReviewEntity reviewEntity) {
     return new OutgoingReviewDto(reviewEntity.getReviewId(), reviewEntity.getAccommodationId(),
         reviewEntity.getComment(), reviewEntity.getRating());
   }
