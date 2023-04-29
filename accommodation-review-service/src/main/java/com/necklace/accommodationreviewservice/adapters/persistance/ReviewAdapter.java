@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
-public class ReviewAdapter implements ReviewPort {
+class ReviewAdapter implements ReviewPort {
 
   private final ReviewReactiveRepository reviewReactiveRepository;
 

@@ -1,11 +1,11 @@
-package com.necklace.accommodationreviewservice.adapters.web;
+package com.necklace.accommodationreviewservice.adapters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.necklace.accommodationreviewservice.adapters.persistance.ReviewReactiveRepository;
 import com.necklace.accommodationreviewservice.adapters.persistance.entity.ReviewEntity;
-import com.necklace.accommodationreviewservice.adapters.web.dto.IncomingReviewDto;
-import com.necklace.accommodationreviewservice.adapters.web.dto.OutgoingReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.IncomingReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.OutgoingReviewDto;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

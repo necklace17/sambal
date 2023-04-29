@@ -1,7 +1,7 @@
 package com.necklace.accommodationreviewservice.adapters.web.handler;
 
-import com.necklace.accommodationreviewservice.adapters.web.dto.IncomingReviewDto;
-import com.necklace.accommodationreviewservice.adapters.web.dto.OutgoingReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.IncomingReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.OutgoingReviewDto;
 import com.necklace.accommodationreviewservice.reviews.ports.in.AddReview;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -24,10 +24,5 @@ public class ReviewHandler {
         .flatMap(addReview::addReview)
         .map(OutgoingReviewDto::fromDomain)
         .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue);
-//    return request.bodyToMono(Review.class)
-//        .map(ReviewEntity::fromDomain)
-//        .flatMap(reviewReactiveRepository::save)
-//        .map(ReviewEntity::toDomain)
-//        .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue);
   }
 }

@@ -1,4 +1,4 @@
-package com.necklace.accommodationreviewservice.adapters.web.dto;
+package com.necklace.accommodationreviewservice.adapters.web.handler.dto;
 
 import com.necklace.accommodationreviewservice.adapters.persistance.entity.ReviewEntity;
 import lombok.AllArgsConstructor;
