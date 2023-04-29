@@ -93,6 +93,21 @@ class AccommodationRepositoryIntgTest {
   }
 
   @Test
+  void findByName() {
+    // given
+    var name = "firstItem";
+    // when
+    var accommodations = accommodationRepository.findByName(name);
+    // then
+    StepVerifier.create(accommodations)
+        .assertNext(
+            accommodationEntity -> assertThat(accommodationEntity.getName()).isEqualTo(name))
+        .verifyComplete();
+
+
+  }
+
+  @Test
   void updateAccommodation() {
     // given
     var accommodation = accommodationRepository.findById("abc")

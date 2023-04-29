@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -81,6 +82,25 @@ class AccommodationControllerIntgTest {
         .is2xxSuccessful()
         .expectBodyList(Accommodation.class)
         .hasSize(3);
+  }
+
+  @Test
+  void getAllAccommodationsByName() {
+    // given
+    var firstAccommodation = "firstAccommodation";
+    var uri = UriComponentsBuilder.fromUriString(ACCOMMODATIONS_URL)
+        .queryParam("name", firstAccommodation)
+        .buildAndExpand()
+        .toUri();
+    // when
+    webTestClient.get()
+        .uri(uri)
+        .exchange()
+        // then
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBodyList(Accommodation.class)
+        .hasSize(1);
   }
 
   @Test

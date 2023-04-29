@@ -40,4 +40,10 @@ public class AccommodationService implements CrudAccommodation {
   public Mono<Void> deleteAccommodationById(String id) {
     return accommodationPort.deleteAccommodationById(id);
   }
+
+  @Override
+  public Flux<Accommodation> getAccommodationsByName(String name) {
+    return accommodationPort.getAllAccommodationsByName(name);
+  }
+
 }

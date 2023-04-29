@@ -15,4 +15,7 @@ public interface CrudAccommodation {
   Mono<Accommodation> updateAccommodationById(String id, Accommodation accommodation);
 
   Mono<Void> deleteAccommodationById(String id);
+
+
+  Flux<Accommodation> getAccommodationsByName(String name);
 }
