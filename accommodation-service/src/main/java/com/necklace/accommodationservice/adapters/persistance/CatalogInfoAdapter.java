@@ -1,8 +1,8 @@
 package com.necklace.accommodationservice.adapters.persistance;
 
+import com.necklace.accommodationservice.accommodation.domain.Accommodation;
+import com.necklace.accommodationservice.accommodation.ports.out.AccommodationPort;
 import com.necklace.accommodationservice.adapters.persistance.entity.AccommodationEntity;
-import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
-import com.necklace.accommodationservice.cataloginfo.ports.out.AccommodationPort;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

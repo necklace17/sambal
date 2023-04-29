@@ -3,8 +3,8 @@ package com.necklace.accommodationservice.adapters.web;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
-import com.necklace.accommodationservice.cataloginfo.ports.in.CrudAccommodation;
+import com.necklace.accommodationservice.accommodation.domain.Accommodation;
+import com.necklace.accommodationservice.accommodation.ports.in.CrudAccommodation;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
-package com.necklace.accommodationservice.cataloginfo;
+package com.necklace.accommodationservice.accommodation;
 
-import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
-import com.necklace.accommodationservice.cataloginfo.ports.in.CrudAccommodation;
-import com.necklace.accommodationservice.cataloginfo.ports.out.AccommodationPort;
+import com.necklace.accommodationservice.accommodation.domain.Accommodation;
+import com.necklace.accommodationservice.accommodation.ports.in.CrudAccommodation;
+import com.necklace.accommodationservice.accommodation.ports.out.AccommodationPort;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

@@ -1,4 +1,4 @@
-package com.necklace.accommodationservice.cataloginfo.domain;
+package com.necklace.accommodationservice.accommodation.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
