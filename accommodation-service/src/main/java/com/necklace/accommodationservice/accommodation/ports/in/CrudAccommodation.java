@@ -1,12 +1,12 @@
-package com.necklace.accommodationservice.cataloginfo.ports.out;
+package com.necklace.accommodationservice.accommodation.ports.in;
 
-import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
+import com.necklace.accommodationservice.accommodation.domain.Accommodation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface AccommodationPort {
+public interface CrudAccommodation {
 
-  Mono<Accommodation> addAccommodation(Accommodation accommodation);
+  Mono<Accommodation> createAccommodation(Accommodation accommodation);
 
   Flux<Accommodation> getAllAccommodations();
 

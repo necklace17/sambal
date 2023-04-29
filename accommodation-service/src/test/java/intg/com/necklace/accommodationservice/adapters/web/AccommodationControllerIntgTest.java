@@ -2,9 +2,9 @@ package com.necklace.accommodationservice.adapters.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.necklace.accommodationservice.accommodation.domain.Accommodation;
 import com.necklace.accommodationservice.adapters.persistance.AccommodationRepository;
 import com.necklace.accommodationservice.adapters.persistance.entity.AccommodationEntity;
-import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

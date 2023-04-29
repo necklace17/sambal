@@ -1,6 +1,6 @@
 package com.necklace.accommodationservice.adapters.persistance.entity;
 
-import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
+import com.necklace.accommodationservice.accommodation.domain.Accommodation;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;

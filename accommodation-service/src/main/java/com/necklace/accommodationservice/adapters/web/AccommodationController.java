@@ -1,7 +1,7 @@
 package com.necklace.accommodationservice.adapters.web;
 
-import com.necklace.accommodationservice.cataloginfo.domain.Accommodation;
-import com.necklace.accommodationservice.cataloginfo.ports.in.CrudAccommodation;
+import com.necklace.accommodationservice.accommodation.domain.Accommodation;
+import com.necklace.accommodationservice.accommodation.ports.in.CrudAccommodation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
