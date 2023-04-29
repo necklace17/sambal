@@ -4,6 +4,7 @@ import com.necklace.accommodationservice.accommodation.domain.Accommodation;
 import com.necklace.accommodationservice.accommodation.ports.in.CrudAccommodation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,14 +40,20 @@ public class AccommodationController {
   }
 
   @GetMapping("/{id}")
-  public Mono<Accommodation> getAccommodationsById(@PathVariable String id) {
-    return crudAccommodation.getAccommodationById(id);
+  public Mono<ResponseEntity<Accommodation>> getAccommodationsById(@PathVariable String id) {
+    return crudAccommodation.getAccommodationById(id)
+        .map(ResponseEntity.ok()::body)
+        .switchIfEmpty(Mono.just(ResponseEntity.notFound()
+            .build()));
   }
 
   @PutMapping("/{id}")
-  public Mono<Accommodation> updateAccommodationById(@PathVariable String id,
+  public Mono<ResponseEntity<Accommodation>> updateAccommodationById(@PathVariable String id,
       @RequestBody @Valid Accommodation accommodation) {
-    return crudAccommodation.updateAccommodationById(id, accommodation);
+    return crudAccommodation.updateAccommodationById(id, accommodation)
+        .map(ResponseEntity.ok()::body)
+        .switchIfEmpty(Mono.just(ResponseEntity.notFound()
+            .build()));
   }
 
   @DeleteMapping("/{id}")

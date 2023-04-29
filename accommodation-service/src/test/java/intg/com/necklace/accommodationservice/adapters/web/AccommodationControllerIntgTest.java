@@ -84,6 +84,17 @@ class AccommodationControllerIntgTest {
   }
 
   @Test
+  void getAccommodationById_not_found() {
+    // when
+    var accommodationId = "not_available";
+    webTestClient.get()
+        .uri(ACCOMMODATIONS_URL + "/{id}", accommodationId)
+        .exchange()
+        .expectStatus()
+        .isNotFound();
+  }
+
+  @Test
   void getAccommodationById() {
     // when
     var accommodationId = "abc";
@@ -95,6 +106,23 @@ class AccommodationControllerIntgTest {
         .expectBody()
         .jsonPath("$.name")
         .isEqualTo("thirdAccommodation");
+  }
+
+  @Test
+  void updateAccommodation_invalid_id() {
+    // given
+    var accommodationId = "not_found";
+    var newName = "New Name";
+    var updatedAccommodation = new AccommodationEntity("abc", "thirdAccommodation",
+        "third Category", List.of(), "third Description", 13.30);
+    updatedAccommodation.setName(newName);
+    // when
+    webTestClient.put()
+        .uri(ACCOMMODATIONS_URL + "/{id}", accommodationId)
+        .bodyValue(updatedAccommodation)
+        .exchange()
+        .expectStatus()
+        .isNotFound();
   }
 
   @Test
