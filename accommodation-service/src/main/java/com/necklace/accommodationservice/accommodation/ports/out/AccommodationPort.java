@@ -15,4 +15,6 @@ public interface AccommodationPort {
   Mono<Accommodation> updateAccommodationById(String id, Accommodation accommodation);
 
   Mono<Void> deleteAccommodationById(String id);
+
+  Flux<Accommodation> getAllAccommodationsByName(String name);
 }

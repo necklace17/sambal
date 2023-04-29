@@ -50,6 +50,12 @@ public class CatalogInfoAdapter implements AccommodationPort {
 
   @Override
   public Mono<Void> deleteAccommodationById(String id) {
-    return this.accommodationRepository.deleteById(id);
+    return accommodationRepository.deleteById(id);
+  }
+
+  @Override
+  public Flux<Accommodation> getAllAccommodationsByName(String name) {
+    return accommodationRepository.findByName(name)
+        .map(AccommodationEntity::toDomain);
   }
 }
