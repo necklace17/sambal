@@ -1,0 +1,8 @@
+server:
+  port: 8081
+spring:
+  data:
+    mongodb:
+      username: user1
+      password: mypassword
+      database: catalog
