@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -56,6 +57,8 @@ class ReviewsIntgTest {
         .uri(REVIEWS_URL)
         .bodyValue(review)
         .exchange()
+        .expectHeader()
+        .contentType(MediaType.APPLICATION_JSON)
         .expectStatus()
         .isCreated()
         .expectBody(OutgoingReviewDto.class)
@@ -77,14 +80,72 @@ class ReviewsIntgTest {
     webTestClient.get()
         .uri(uri)
         .exchange()
+        .expectHeader()
+        .contentType(MediaType.APPLICATION_JSON)
         .expectStatus()
         .is2xxSuccessful()
         .expectBodyList(OutgoingReviewDto.class)
+        .hasSize(1)
         .consumeWith(
             reviewEntityExchangeResult -> assertThat(reviewEntityExchangeResult.getResponseBody())
-                .hasSize(1)
                 .extracting(OutgoingReviewDto::getComment)
                 .contains("bad")
                 .doesNotContain("good"));
+  }
+
+  @Test
+  void getReviewByAccommodation_missing_accommodation_id() {
+    // when
+    webTestClient.get()
+        .uri(REVIEWS_URL)
+        .exchange()
+        .expectHeader()
+        .contentType(MediaType.APPLICATION_JSON)
+        .expectStatus()
+        .is4xxClientError()
+        .expectBody(String.class)
+        .consumeWith(stringEntityExchangeResult -> assertThat(
+            stringEntityExchangeResult.getResponseBody()).contains("missing")
+            .contains("accommodationId"));
+  }
+
+  @Test
+  void getReviewByAccommodation_blank_accommodation_id() {
+    var accommodationId = "";
+    var uri = UriComponentsBuilder.fromUriString(REVIEWS_URL)
+        .queryParam("accommodationId", accommodationId)
+        .buildAndExpand()
+        .toUri();
+    // when
+    webTestClient.get()
+        .uri(uri)
+        .exchange()
+        .expectHeader()
+        .contentType(MediaType.APPLICATION_JSON)
+        .expectStatus()
+        .is4xxClientError()
+        .expectBody(String.class)
+        .consumeWith(stringEntityExchangeResult -> assertThat(
+            stringEntityExchangeResult.getResponseBody()).contains("missing")
+            .contains("accommodationId"));
+  }
+
+  @Test
+  void getReviewByAccommodation_not_present() {
+    var accommodationId = "not_there";
+    var uri = UriComponentsBuilder.fromUriString(REVIEWS_URL)
+        .queryParam("accommodationId", accommodationId)
+        .buildAndExpand()
+        .toUri();
+    // when
+    webTestClient.get()
+        .uri(uri)
+        .exchange()
+        .expectHeader()
+        .contentType(MediaType.APPLICATION_JSON)
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBodyList(OutgoingReviewDto.class)
+        .hasSize(0);
   }
 }

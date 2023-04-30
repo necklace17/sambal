@@ -5,6 +5,7 @@ import com.necklace.accommodationreviewservice.adapters.web.handler.dto.Outgoing
 import com.necklace.accommodationreviewservice.reviews.ports.in.AddReview;
 import com.necklace.accommodationreviewservice.reviews.ports.in.GetReviews;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -32,9 +33,11 @@ public class ReviewHandler {
 
   public Mono<ServerResponse> getReviews(ServerRequest request) {
     var accommodationId = request.queryParam("accommodationId");
-    if (!accommodationId.isPresent()) {
-      return ServerResponse.badRequest()
-          .body("accommodationId missing", String.class);
+    if (!accommodationId.isPresent() || accommodationId.get()
+        .isBlank()) {
+      return ServerResponse.unprocessableEntity()
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(Mono.just("accommodationId missing"), String.class);
     }
     Flux<OutgoingReviewDto> reviewsFlux = getReviews.getReviewsByAccommodation(
             accommodationId.get())
