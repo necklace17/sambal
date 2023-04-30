@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -63,5 +64,27 @@ class ReviewsIntgTest {
           assertThat(responseBody.getReviewId()).isNotNull();
           assertThat(responseBody.getComment()).isEqualTo(review.getComment());
         });
+  }
+
+  @Test
+  void getReviewByAccommodation() {
+    var accommodationId = "3";
+    var uri = UriComponentsBuilder.fromUriString(REVIEWS_URL)
+        .queryParam("accommodationId", accommodationId)
+        .buildAndExpand()
+        .toUri();
+    // when
+    webTestClient.get()
+        .uri(uri)
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBodyList(OutgoingReviewDto.class)
+        .consumeWith(
+            reviewEntityExchangeResult -> assertThat(reviewEntityExchangeResult.getResponseBody())
+                .hasSize(1)
+                .extracting(OutgoingReviewDto::getComment)
+                .contains("bad")
+                .doesNotContain("good"));
   }
 }
