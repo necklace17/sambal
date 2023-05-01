@@ -58,10 +58,15 @@ public class ReviewHandler {
   public Mono<ServerResponse> updateReview(ServerRequest request) {
     return request.bodyToMono(CreateReviewDto.class)
         .map(CreateReviewDto::toDomain)
-        .flatMap(review -> reviewManagement.updateReview(request.pathVariable("id"), review))
+        .flatMap(review -> reviewManagement.updateReview(extractId(request), review))
         .map(OutgoingReviewDto::fromPersistenceEntity)
         .flatMap(savedReview -> ServerResponse.ok()
             .bodyValue(savedReview));
 
   }
+
+  private String extractId(ServerRequest request) {
+    return request.pathVariable("id");
+  }
+
 }

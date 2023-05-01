@@ -37,10 +37,9 @@ class ReviewAdapter implements ReviewPort {
   @Override
   public Mono<ReviewEntity> updateReview(String id, Review review) {
     return reviewReactiveRepository.findById(id)
-        .map(reviewEntity -> {
+        .doOnNext(reviewEntity -> {
           reviewEntity.setComment(review.getComment());
           reviewEntity.setRating(review.getRating());
-          return reviewEntity;
         })
         .flatMap(reviewReactiveRepository::save);
   }
