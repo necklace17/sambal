@@ -24,7 +24,4 @@ public class ReviewEntity {
         review.getRating());
   }
 
-  public Review toDomain() {
-    return new Review(accommodationId, comment, rating);
-  }
 }
