@@ -10,4 +10,6 @@ public interface ReviewPort {
   Mono<ReviewEntity> addReview(Review review);
 
   Flux<ReviewEntity> getReviewsByAccommodation(String accommodationId);
+
+  Mono<ReviewEntity> getReviewById(String id);
 }

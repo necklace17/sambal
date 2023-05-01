@@ -36,7 +36,7 @@ class ReviewsIntgTest {
     var reviews = List.of(
         new ReviewEntity(null, "1", "very good", 5.0),
         new ReviewEntity(null, "2", "good", 4.0),
-        new ReviewEntity(null, "3", "bad", 1.0));
+        new ReviewEntity("abc", "3", "bad", 1.0));
 
     reviewReactiveRepository.saveAll(reviews)
         .blockLast();
@@ -66,6 +66,37 @@ class ReviewsIntgTest {
           OutgoingReviewDto responseBody = reviewEntityExchangeResult.getResponseBody();
           assertThat(responseBody.getReviewId()).isNotNull();
           assertThat(responseBody.getComment()).isEqualTo(review.getComment());
+        });
+  }
+
+  @Test
+  void getReviewById_not_found() {
+    var reviewId = "not_found";
+    // when
+    webTestClient.get()
+        .uri(REVIEWS_URL + "/{id}", reviewId)
+        .exchange()
+        .expectStatus()
+        .isNotFound();
+  }
+
+  @Test
+  void getReviewById() {
+    var reviewId = "abc";
+    // when
+    webTestClient.get()
+        .uri(REVIEWS_URL + "/{id}", reviewId)
+        .exchange()
+        .expectHeader()
+        .contentType(MediaType.APPLICATION_JSON)
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBody(OutgoingReviewDto.class)
+        .consumeWith(reviewEntityExchangeResult -> {
+          var responseBody = reviewEntityExchangeResult.getResponseBody();
+          assertThat(responseBody.getReviewId()).isNotNull();
+          assertThat(responseBody.getComment()
+              .equals("bad"));
         });
   }
 

@@ -26,4 +26,9 @@ class ReviewAdapter implements ReviewPort {
   public Flux<ReviewEntity> getReviewsByAccommodation(String accommodationId) {
     return reviewReactiveRepository.getAllByAccommodationId(accommodationId);
   }
+
+  @Override
+  public Mono<ReviewEntity> getReviewById(String id) {
+    return reviewReactiveRepository.findById(id);
+  }
 }
