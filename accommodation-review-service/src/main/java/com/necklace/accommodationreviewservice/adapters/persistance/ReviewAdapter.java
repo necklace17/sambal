@@ -33,4 +33,15 @@ class ReviewAdapter implements ReviewPort {
   public Mono<Void> deleteReviewById(String id) {
     return reviewReactiveRepository.deleteById(id);
   }
+
+  @Override
+  public Mono<ReviewEntity> updateReview(String id, Review review) {
+    return reviewReactiveRepository.findById(id)
+        .map(reviewEntity -> {
+          reviewEntity.setComment(review.getComment());
+          reviewEntity.setRating(review.getRating());
+          return reviewEntity;
+        })
+        .flatMap(reviewReactiveRepository::save);
+  }
 }

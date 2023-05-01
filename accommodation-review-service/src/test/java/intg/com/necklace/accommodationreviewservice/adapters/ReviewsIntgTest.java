@@ -4,8 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.necklace.accommodationreviewservice.adapters.persistance.ReviewReactiveRepository;
 import com.necklace.accommodationreviewservice.adapters.persistance.entity.ReviewEntity;
-import com.necklace.accommodationreviewservice.adapters.web.handler.dto.IncomingReviewDto;
-import com.necklace.accommodationreviewservice.adapters.web.handler.dto.OutgoingReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.in.CreateReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.in.UpdateReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.out.OutgoingReviewDto;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +52,7 @@ class ReviewsIntgTest {
   @Test
   void addReview() {
     // given
-    var review = new IncomingReviewDto("1", "very good", 5.0);
+    var review = new CreateReviewDto("1", "very good", 5.0);
     // when
     webTestClient.post()
         .uri(REVIEWS_URL)
@@ -190,5 +191,35 @@ class ReviewsIntgTest {
         .is2xxSuccessful()
         .expectBodyList(OutgoingReviewDto.class)
         .hasSize(0);
+  }
+
+  @Test
+  void updateReview() {
+    var reviewId = "abc";
+    var newComment = "it was good";
+    var newRating = 5.0;
+    var updatedReview = new UpdateReviewDto(newComment, newRating);
+
+    webTestClient.put()
+        .uri(REVIEWS_URL + "/{id}", reviewId)
+        .bodyValue(updatedReview)
+        .exchange()
+        .expectHeader()
+        .contentType(MediaType.APPLICATION_JSON)
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBody(OutgoingReviewDto.class)
+        .consumeWith(reviewEntityExchangeResult -> {
+          assertThat(reviewEntityExchangeResult.getResponseBody()).extracting(
+                  OutgoingReviewDto::getReviewId, OutgoingReviewDto::getAccommodationId,
+                  OutgoingReviewDto::getComment, OutgoingReviewDto::getRating)
+              .contains(reviewId, "3", updatedReview.getComment(), updatedReview.getRating());
+        });
+    ReviewEntity entityFromDb = reviewReactiveRepository.findById(reviewId)
+        .block();
+    assertThat(entityFromDb).extracting(
+            ReviewEntity::getReviewId, ReviewEntity::getAccommodationId,
+            ReviewEntity::getComment, ReviewEntity::getRating)
+        .contains(reviewId, "3", updatedReview.getComment(), updatedReview.getRating());
   }
 }

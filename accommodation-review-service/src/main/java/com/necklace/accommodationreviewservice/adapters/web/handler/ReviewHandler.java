@@ -1,7 +1,7 @@
 package com.necklace.accommodationreviewservice.adapters.web.handler;
 
-import com.necklace.accommodationreviewservice.adapters.web.handler.dto.IncomingReviewDto;
-import com.necklace.accommodationreviewservice.adapters.web.handler.dto.OutgoingReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.in.CreateReviewDto;
+import com.necklace.accommodationreviewservice.adapters.web.handler.dto.out.OutgoingReviewDto;
 import com.necklace.accommodationreviewservice.reviews.ports.in.ReviewManagement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class ReviewHandler {
   private final ReviewManagement reviewManagement;
 
   public Mono<ServerResponse> addReview(ServerRequest request) {
-    return request.bodyToMono(IncomingReviewDto.class)
-        .map(IncomingReviewDto::toDomain)
+    return request.bodyToMono(CreateReviewDto.class)
+        .map(CreateReviewDto::toDomain)
         .flatMap(reviewManagement::addReview)
         .map(OutgoingReviewDto::fromPersistenceEntity)
         .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue);
@@ -53,5 +53,15 @@ public class ReviewHandler {
     reviewManagement.deleteReviewById(request.pathVariable("id"));
     return ServerResponse.noContent()
         .build();
+  }
+
+  public Mono<ServerResponse> updateReview(ServerRequest request) {
+    return request.bodyToMono(CreateReviewDto.class)
+        .map(CreateReviewDto::toDomain)
+        .flatMap(review -> reviewManagement.updateReview(request.pathVariable("id"), review))
+        .map(OutgoingReviewDto::fromPersistenceEntity)
+        .flatMap(savedReview -> ServerResponse.ok()
+            .bodyValue(savedReview));
+
   }
 }

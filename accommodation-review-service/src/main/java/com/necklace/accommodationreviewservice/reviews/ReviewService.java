@@ -34,4 +34,9 @@ class ReviewService implements ReviewManagement {
   public Mono<Void> deleteReviewById(String id) {
     return reviewPort.deleteReviewById(id);
   }
+
+  @Override
+  public Mono<ReviewEntity> updateReview(String id, Review review) {
+    return reviewPort.updateReview(id, review);
+  }
 }

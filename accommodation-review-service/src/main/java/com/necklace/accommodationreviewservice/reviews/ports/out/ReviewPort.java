@@ -14,4 +14,6 @@ public interface ReviewPort {
   Mono<ReviewEntity> getReviewById(String id);
 
   Mono<Void> deleteReviewById(String id);
+
+  Mono<ReviewEntity> updateReview(String id, Review review);
 }
