@@ -71,6 +71,27 @@ class ReviewsIntgTest {
   }
 
   @Test
+  void addReview_no_accommodation_id() {
+    // given
+    var review = new CreateReviewDto(null, "very good", 5.0);
+    // when
+    webTestClient.post()
+        .uri(REVIEWS_URL)
+        .bodyValue(review)
+        .exchange()
+        .expectHeader()
+        .contentType(MediaType.APPLICATION_JSON)
+        .expectStatus()
+        .isCreated()
+        .expectBody(OutgoingReviewDto.class)
+        .consumeWith(reviewEntityExchangeResult -> {
+          OutgoingReviewDto responseBody = reviewEntityExchangeResult.getResponseBody();
+          assertThat(responseBody.getReviewId()).isNotNull();
+          assertThat(responseBody.getComment()).isEqualTo(review.getComment());
+        });
+  }
+
+  @Test
   void getReviewById_not_found() {
     var reviewId = "not_found";
     // when
