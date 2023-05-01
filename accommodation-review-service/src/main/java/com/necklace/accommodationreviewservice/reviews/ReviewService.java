@@ -29,4 +29,9 @@ class ReviewService implements ReviewManagement {
   public Flux<ReviewEntity> getReviewsByAccommodation(String accommodationId) {
     return reviewPort.getReviewsByAccommodation(accommodationId);
   }
+
+  @Override
+  public Mono<Void> deleteReviewById(String id) {
+    return reviewPort.deleteReviewById(id);
+  }
 }

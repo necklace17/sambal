@@ -12,4 +12,6 @@ public interface ReviewPort {
   Flux<ReviewEntity> getReviewsByAccommodation(String accommodationId);
 
   Mono<ReviewEntity> getReviewById(String id);
+
+  Mono<Void> deleteReviewById(String id);
 }

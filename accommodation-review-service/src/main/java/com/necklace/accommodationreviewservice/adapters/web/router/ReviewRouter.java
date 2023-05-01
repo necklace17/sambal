@@ -18,6 +18,7 @@ public class ReviewRouter {
             .POST("", request -> reviewHandler.addReview(request))
             .GET("", request -> reviewHandler.getReviews(request))
             .GET("/{id}", request -> reviewHandler.getReviewById(request))
+            .DELETE("/{id}", request -> reviewHandler.deleteReviewById(request))
         )
         .build();
   }

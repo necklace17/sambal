@@ -12,4 +12,6 @@ public interface ReviewManagement {
   Mono<ReviewEntity> getReviewById(String id);
 
   Flux<ReviewEntity> getReviewsByAccommodation(String accommodationId);
+
+  Mono<Void> deleteReviewById(String id);
 }

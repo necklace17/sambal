@@ -48,4 +48,10 @@ public class ReviewHandler {
         .switchIfEmpty(ServerResponse.notFound()
             .build());
   }
+
+  public Mono<ServerResponse> deleteReviewById(ServerRequest request) {
+    reviewManagement.deleteReviewById(request.pathVariable("id"));
+    return ServerResponse.noContent()
+        .build();
+  }
 }

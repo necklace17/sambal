@@ -101,6 +101,18 @@ class ReviewsIntgTest {
   }
 
   @Test
+  void deleteReviewById() {
+    var reviewId = "abc";
+    // when
+    webTestClient.delete()
+        .uri(REVIEWS_URL + "/{id}", reviewId)
+        .exchange()
+        .expectStatus()
+        .isNoContent();
+  }
+
+
+  @Test
   void getReviewByAccommodation() {
     var accommodationId = "3";
     var uri = UriComponentsBuilder.fromUriString(REVIEWS_URL)
