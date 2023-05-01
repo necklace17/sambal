@@ -2,21 +2,18 @@ package com.necklace.accommodationreviewservice.reviews;
 
 import com.necklace.accommodationreviewservice.adapters.persistance.entity.ReviewEntity;
 import com.necklace.accommodationreviewservice.reviews.domain.Review;
-import com.necklace.accommodationreviewservice.reviews.ports.in.AddReview;
-import com.necklace.accommodationreviewservice.reviews.ports.in.GetReviews;
+import com.necklace.accommodationreviewservice.reviews.ports.in.ReviewManagement;
 import com.necklace.accommodationreviewservice.reviews.ports.out.ReviewPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-class ReviewService implements AddReview, GetReviews {
+@RequiredArgsConstructor
+class ReviewService implements ReviewManagement {
 
   private final ReviewPort reviewPort;
-
-  public ReviewService(ReviewPort reviewPort) {
-    this.reviewPort = reviewPort;
-  }
 
   @Override
   public Mono<ReviewEntity> addReview(Review review) {
@@ -24,7 +21,22 @@ class ReviewService implements AddReview, GetReviews {
   }
 
   @Override
+  public Mono<ReviewEntity> getReviewById(String id) {
+    return reviewPort.getReviewById(id);
+  }
+
+  @Override
   public Flux<ReviewEntity> getReviewsByAccommodation(String accommodationId) {
     return reviewPort.getReviewsByAccommodation(accommodationId);
+  }
+
+  @Override
+  public Mono<Void> deleteReviewById(String id) {
+    return reviewPort.deleteReviewById(id);
+  }
+
+  @Override
+  public Mono<ReviewEntity> updateReview(String id, Review review) {
+    return reviewPort.updateReview(id, review);
   }
 }
